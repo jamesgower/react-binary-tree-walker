@@ -3,12 +3,24 @@ import Tree from "react-d3-tree";
 import BinarySearchTree from "./BinarySearchTree";
 
 class TreeVisualiser extends React.Component<any> {
+	public treeContainer: any;
 	state: any = {
-		tree: null,
+		tree: {},
 		treeType: null,
 		newNumber: "",
-		values: []
+		values: [],
+		translate: {}
 	};
+
+	componentDidMount() {
+		const dimensions = this.treeContainer.getBoundingClientRect();
+		this.setState({
+			translate: {
+				x: dimensions.width / 2,
+				y: dimensions.height / 4
+			}
+		});
+	}
 
 	componentWillMount() {
 		const values = Array.from({ length: 5 }, () =>
@@ -30,14 +42,16 @@ class TreeVisualiser extends React.Component<any> {
 		return (
 			<div
 				style={{
-					width: "100vw",
-					height: "100vh",
-					margin: "20px"
+					border: "1px solid red",
+					width: "100%",
+					height: "60vh"
 				}}
+				ref={tc => (this.treeContainer = tc)}
 			>
 				{this.state.newNumber}
 				<Tree
 					data={this.state.tree && this.state.tree}
+					translate={this.state.translate}
 					orientation="vertical"
 				/>
 				<input
