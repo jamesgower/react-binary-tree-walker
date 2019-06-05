@@ -1,17 +1,36 @@
-import React from "react";
+import React, { DOMElement } from "react";
 import Tree from "react-d3-tree";
-import BinarySearchTree from "./BinarySearchTree";
+import BinarySearchTree from "../classes/BinarySearchTree";
+import TreeItem from "../classes/TreeItem";
+import { TreeState } from "../interfaces/ITreeVisualiser";
 
-class TreeVisualiser extends React.Component<any> {
-	state: any = {
-		tree: null,
-		treeType: null,
-		newNumber: "",
-		values: []
-	};
+const initialState: TreeState = {
+	tree: null,
+	treeType: null,
+	newNumber: "",
+	values: [],
+	translate: null
+};
 
+const containerStyles: React.CSSProperties = {
+	width: "100%",
+	height: "100vh"
+};
+
+class TreeVisualiser extends React.Component<object, TreeState> {
+	readonly state: TreeState = initialState;
+	public treeContainer: React.RefObject<DOMElement>;
+	componentDidMount() {
+		const dimensions = this.treeContainer.getBoundingClientRect();
+		this.setState({
+			translate: {
+				x: dimensions.width / 2,
+				y: dimensions.height / 4
+			}
+		});
+	}
 	componentWillMount() {
-		const values = Array.from({ length: 5 }, () =>
+		const values: number[] = Array.from({ length: 5 }, () =>
 			Math.floor(Math.random() * 1000)
 		);
 		console.log(values);
@@ -19,22 +38,9 @@ class TreeVisualiser extends React.Component<any> {
 		this.setState({ tree: BST.returnTree(), values });
 	}
 
-	onAddNumber = () => {
-		const values = this.state.values;
-		values.push(parseInt(this.state.newNumber));
-		const BST = new BinarySearchTree(values);
-		this.setState({ tree: BST.returnTree(), values });
-	};
-
 	render() {
 		return (
-			<div
-				style={{
-					width: "100vw",
-					height: "100vh",
-					margin: "20px"
-				}}
-			>
+			<div style={containerStyles} ref={tc => (this.treeContainer = tc)}>
 				{this.state.newNumber}
 				<Tree
 					data={this.state.tree && this.state.tree}
@@ -48,6 +54,13 @@ class TreeVisualiser extends React.Component<any> {
 			</div>
 		);
 	}
+
+	private onAddNumber = () => {
+		const values: number[] = this.state.values;
+		values.push(parseInt(this.state.newNumber));
+		const BST: BinarySearchTree = new BinarySearchTree(values);
+		this.setState({ tree: BST.returnTree(), values });
+	};
 }
 
 export default TreeVisualiser;
