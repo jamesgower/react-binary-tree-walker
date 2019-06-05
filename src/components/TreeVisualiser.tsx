@@ -54,27 +54,37 @@ class TreeVisualiser extends React.Component<object, TreeState> {
 			<Container>
 				<Row>
 					<Col md={3}>
-						<FormGroup>
-							<h4>Insert a node</h4>
-							<FormText>Add a node to the current tree:</FormText>
+						<h4 className="text-center">Set tree type</h4>
+						<FormText>Change the type of tree which the current data:</FormText>
+						<FormGroup style={{ display: "flex" }}>
+							<Input type="select" style={{ marginRight: "10px" }}>
+								<option value="binarySearchTree">Binary Search Tree</option>
+								<option value="maxBinaryHeap">Max Binary Heap</option>
+								<option value="minBinaryHeap">Min Binary Heap</option>
+								<option value="priorityQueue">Priority Queue</option>
+							</Input>
+							<Button color="danger">Select</Button>
+						</FormGroup>
+					</Col>
+					<Col md={3}>
+						<h4 className="text-center">Insert a node</h4>
+						<FormText>
+							Input a number to insert a node into the current tree:
+						</FormText>
+						<FormGroup style={{ display: "flex" }}>
 							<Input
 								value={newNumber}
-								onChange={e =>
-									this.setState({
-										newNumber: e.target.value
-									})
-								}
 								style={{
 									display: "inline-flex",
-									width: "100px",
 									marginRight: "10px"
 								}}
+								onChange={e => this.setState({ newNumber: e.target.value })}
 							/>
 							<Button
-								color="success"
+								color="primary"
 								style={{
 									display: "inline-flex",
-									marginTop: "-5px"
+									textAlign: "center"
 								}}
 								onClick={this.onAddNumber}
 								disabled={!newNumber.match(regex)}
@@ -83,13 +93,7 @@ class TreeVisualiser extends React.Component<object, TreeState> {
 							</Button>
 						</FormGroup>
 					</Col>
-					<Col md={5}>
-						<h4>Set tree type</h4>
-						<Input type="select">
-							<option>Binary Search Tree</option>
-						</Input>
-					</Col>
-					<Col md={4}>
+					<Col md={3}>
 						<h4>Begin tree traversal</h4>
 						<Input />
 					</Col>
@@ -119,6 +123,8 @@ class TreeVisualiser extends React.Component<object, TreeState> {
 		const BST = new BinarySearchTree(values);
 		return this.setState({ tree: BST.returnTree(), values });
 	};
+
+	// private onSetTreeType = (e): void => {};
 }
 
 export default TreeVisualiser;
