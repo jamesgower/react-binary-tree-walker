@@ -25,7 +25,7 @@ const initialState: TreeState = {
 
 const treeContainerStyles: React.CSSProperties = {
 	width: "100%",
-	height: "75vh",
+	height: "70vh",
 	border: "1px solid black"
 };
 
@@ -52,56 +52,47 @@ class TreeVisualiser extends React.Component<object, TreeState> {
 		const { newNumber, tree, translate } = this.state;
 		return (
 			<Container>
-				<Row style={{ margin: "60px 0 30px 0" }}>
-					<Col md={4}>
+				<h2 className="text-center" style={{ padding: "10px" }}>
+					Tree Walker Visualiser
+				</h2>
+				<Row style={{ height: "20vh" }}>
+					<Col md={3}>
 						<h4 className="text-center">Set Tree Type</h4>
 						<FormText>
-							Change the type of tree which the current data:
+							Change the type of tree to change how the tree below is visualised
 						</FormText>
 						<FormGroup style={{ display: "flex" }}>
-							<Input
-								type="select"
-								style={{ marginRight: "10px" }}
-							>
-								<option value="binarySearchTree">
-									Binary Search Tree
-								</option>
-								<option value="maxBinaryHeap">
-									Max Binary Heap
-								</option>
-								<option value="minBinaryHeap">
-									Min Binary Heap
-								</option>
-								<option value="priorityQueue">
-									Priority Queue
-								</option>
+							<Input type="select" style={{ marginRight: "10px" }}>
+								<option value="binarySearchTree">Binary Search Tree</option>
+								<option value="maxBinaryHeap">Max Binary Heap</option>
+								<option value="minBinaryHeap">Min Binary Heap</option>
+								<option value="priorityQueue">Priority Queue</option>
 							</Input>
 							<Button color="danger">Select</Button>
 						</FormGroup>
 					</Col>
-					<Col md={4}>
+					<Col md={6}>
+						<h4 className="text-center">Build the Tree</h4>
+						<FormText>
+							Set the number of nodes you want insert, and the maximum size of
+							the nodes randomly inserted into the tree
+						</FormText>
+					</Col>
+					<Col md={3}>
 						<h4 className="text-center">Insert a Node</h4>
 						<FormText>
-							Input a number to insert a node into the current
-							tree:
+							Input a number to insert a node into the current tree:
 						</FormText>
 						<FormGroup style={{ display: "flex" }}>
 							<Input
 								value={newNumber}
 								style={{
-									display: "inline-flex",
 									marginRight: "10px"
 								}}
-								onChange={e =>
-									this.setState({ newNumber: e.target.value })
-								}
+								onChange={e => this.setState({ newNumber: e.target.value })}
 							/>
 							<Button
 								color="primary"
-								style={{
-									display: "inline-flex",
-									textAlign: "center"
-								}}
 								onClick={this.onAddNumber}
 								disabled={!newNumber.match(regex)}
 							>
@@ -109,28 +100,19 @@ class TreeVisualiser extends React.Component<object, TreeState> {
 							</Button>
 						</FormGroup>
 					</Col>
+				</Row>
+				<Row>
 					<Col md={4}>
 						<h4 className="text-center">Start Tree Traversal</h4>
-						<FormText>
-							Select the technique to traverse the tree with:
-						</FormText>
+						<FormText>Select the technique to traverse the tree with:</FormText>
 						<FormGroup style={{ display: "flex" }}>
-							<Input
-								type="select"
-								style={{ marginRight: "10px" }}
-							>
-								<option value="depthFirstSearch">
-									Breadth-First Search
-								</option>
+							<Input type="select" style={{ marginRight: "10px" }}>
+								<option value="depthFirstSearch">Breadth-First Search</option>
 								<option value="postOrder">
 									Post-Order (Depth-First Search)
 								</option>
-								<option value="preOrder">
-									Pre-Order (Depth-First Search)
-								</option>
-								<option value="inOrder">
-									In-Order (Depth-First Search)
-								</option>
+								<option value="preOrder">Pre-Order (Depth-First Search)</option>
+								<option value="inOrder">In-Order (Depth-First Search)</option>
 							</Input>
 							<Button color="success">Start</Button>
 						</FormGroup>
