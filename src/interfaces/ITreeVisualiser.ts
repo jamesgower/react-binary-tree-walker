@@ -9,4 +9,6 @@ export interface TreeState {
 		x: number;
 		y: number;
 	};
+	maxNodes: number;
+	maxAmount: number;
 }

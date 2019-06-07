@@ -17,6 +17,8 @@ const initialState: TreeState = {
 	treeType: null,
 	newNumber: "",
 	values: [],
+	maxNodes: null,
+	maxAmount: null,
 	translate: {
 		x: null,
 		y: null
@@ -25,7 +27,8 @@ const initialState: TreeState = {
 
 const treeContainerStyles: React.CSSProperties = {
 	width: "100%",
-	height: "70vh",
+	height: "60vh",
+	marginTop: "30px",
 	border: "1px solid black"
 };
 
@@ -44,18 +47,15 @@ class TreeVisualiser extends React.Component<object, TreeState> {
 			}
 		});
 	}
-	componentWillMount() {
-		this.createRandomTree(10, 1000);
-	}
 
 	render() {
-		const { newNumber, tree, translate } = this.state;
+		const { newNumber, tree, translate, maxNodes, maxAmount } = this.state;
 		return (
-			<Container>
+			<Container height="100vh">
 				<h2 className="text-center" style={{ padding: "10px" }}>
 					Tree Walker Visualiser
 				</h2>
-				<Row style={{ height: "20vh" }}>
+				<Row>
 					<Col md={3}>
 						<h4 className="text-center">Set Tree Type</h4>
 						<FormText>
@@ -77,6 +77,37 @@ class TreeVisualiser extends React.Component<object, TreeState> {
 							Set the number of nodes you want insert, and the maximum size of
 							the nodes randomly inserted into the tree
 						</FormText>
+						<Row>
+							<Col md={5}>
+								<Input
+									type="number"
+									value={maxNodes}
+									onChange={e =>
+										this.setState({
+											maxNodes: parseInt(e.target.value)
+										})
+									}
+									placeholder="Maximum Nodes"
+								/>
+							</Col>
+							<Col md={5}>
+								<Input
+									type="number"
+									value={maxAmount}
+									onChange={e =>
+										this.setState({
+											maxAmount: parseInt(e.target.value)
+										})
+									}
+									placeholder="Maximum Size"
+								/>
+							</Col>
+							<Col md={2}>
+								<Button color="warning" onClick={this.createRandomTree}>
+									Build
+								</Button>
+							</Col>
+						</Row>
 					</Col>
 					<Col md={3}>
 						<h4 className="text-center">Insert a Node</h4>
@@ -102,7 +133,7 @@ class TreeVisualiser extends React.Component<object, TreeState> {
 					</Col>
 				</Row>
 				<Row>
-					<Col md={4}>
+					<Col md={{ size: 4, offset: 4 }}>
 						<h4 className="text-center">Start Tree Traversal</h4>
 						<FormText>Select the technique to traverse the tree with:</FormText>
 						<FormGroup style={{ display: "flex" }}>
@@ -119,11 +150,13 @@ class TreeVisualiser extends React.Component<object, TreeState> {
 					</Col>
 				</Row>
 				<div style={treeContainerStyles} ref={this.treeRef}>
-					<Tree
-						data={tree !== null && tree}
-						translate={translate}
-						orientation="vertical"
-					/>
+					{tree && (
+						<Tree
+							data={tree !== null && tree}
+							translate={translate}
+							orientation="vertical"
+						/>
+					)}
 				</div>
 			</Container>
 		);
@@ -136,9 +169,10 @@ class TreeVisualiser extends React.Component<object, TreeState> {
 		return this.setState({ tree: BST.returnTree(), values, newNumber: "" });
 	};
 
-	private createRandomTree = (size: number, max: number): void => {
-		const values: number[] = Array.from({ length: size }, () =>
-			Math.floor(Math.random() * max)
+	private createRandomTree = (): void => {
+		const { maxAmount, maxNodes } = this.state;
+		const values: number[] = Array.from({ length: maxNodes }, () =>
+			Math.floor(Math.random() * maxAmount)
 		);
 		const BST = new BinarySearchTree(values);
 		return this.setState({ tree: BST.returnTree(), values });
